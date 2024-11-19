@@ -3,6 +3,7 @@ title = "GoMux Config"
 [config]
 session = "SessionName"
 project = "~/projects/myproject"
+editor_cmd = "vim ."
 server_cmd = ""
 docker_cmd = ""
 database_cmd = ""
