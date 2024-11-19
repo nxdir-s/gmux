@@ -9,12 +9,13 @@ import (
 )
 
 type Tmux struct {
-	service ports.TmuxService
 	cfg     *valobj.Config
+	service ports.TmuxService
 }
 
-func NewTmux(service ports.TmuxService) (*Tmux, error) {
+func NewTmux(config *valobj.Config, service ports.TmuxService) (*Tmux, error) {
 	return &Tmux{
+		cfg:     config,
 		service: service,
 	}, nil
 }

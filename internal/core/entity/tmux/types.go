@@ -1,11 +1,11 @@
 package tmux
 
+const Alias string = "tmux"
+
 const (
 	SessionExists int = iota
 	SessionNotExists
 )
-
-const Alias string = "tmux"
 
 type Command string
 

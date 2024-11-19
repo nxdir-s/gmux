@@ -17,5 +17,9 @@ func NewCLIAdapter(tmux ports.Tmux) (*CLIAdapter, error) {
 }
 
 func (a *CLIAdapter) TmuxStart(ctx context.Context) error {
+	if err := a.tmux.Start(ctx); err != nil {
+		return err
+	}
+
 	return nil
 }

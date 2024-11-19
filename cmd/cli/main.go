@@ -54,7 +54,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	tmux, err = domain.NewTmux(tmuxService)
+	tmux, err = domain.NewTmux(cfg, tmuxService)
 	if err != nil {
 		fmt.Fprintf(os.Stdout, "error creating tmux orchestrator: %s\n", err.Error())
 		os.Exit(1)
