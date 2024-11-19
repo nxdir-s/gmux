@@ -3,7 +3,18 @@ title = "Example GoMux Config"
 [config]
 session = "SessionName"
 project = "~/projects/myproject"
-editor_cmd = "vim ."
-server_cmd = ""
-docker_cmd = ""
-database_cmd = ""
+
+[windows]
+
+[windows.editor]
+cmd = "vim ."
+
+[windows.docker]
+cmd = "docker compose up"
+
+[windows.database]
+cmd = "psql"
+
+[windows.server]
+cmd = "go run cmd/main.go"
+
