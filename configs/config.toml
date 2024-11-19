@@ -1,6 +1,6 @@
 title = "GoMux Config"
 
-[cli]
+[config]
 session = "SessionName"
 project = "~/projects/myproject"
 server_cmd = ""

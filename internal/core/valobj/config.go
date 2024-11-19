@@ -1,4 +1,4 @@
-package entity
+package valobj
 
 type Config struct {
 	Session     string

@@ -1,6 +1,10 @@
 package ports
 
-import "context"
+import (
+	"context"
+
+	"github.com/nxdir-s/gomux/internal/core/valobj"
+)
 
 type TmuxPort interface {
 	HasSession(ctx context.Context) (int, error)
@@ -11,4 +15,8 @@ type TmuxPort interface {
 	SelectWindow(ctx context.Context) error
 	SetOption(ctx context.Context) error
 	SetWindowOpt(ctx context.Context) error
+}
+
+type ConfigPort interface {
+	LoadConfig() (*valobj.Config, error)
 }
