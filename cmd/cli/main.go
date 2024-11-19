@@ -9,6 +9,7 @@ import (
 	"github.com/nxdir-s/gomux/internal/adapters/primary"
 	"github.com/nxdir-s/gomux/internal/adapters/secondary"
 	"github.com/nxdir-s/gomux/internal/core/domain"
+	"github.com/nxdir-s/gomux/internal/core/service"
 	"github.com/nxdir-s/gomux/internal/ports"
 )
 
@@ -16,8 +17,11 @@ func main() {
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer cancel()
 
-	// domains
+	// domain orchestrators
 	var tmux ports.Tmux
+
+	// services
+	var tmuxService ports.TmuxService
 
 	// secondary adapters
 	var tmuxAdapter ports.TmuxPort
@@ -38,13 +42,19 @@ func main() {
 		os.Exit(1)
 	}
 
-	tmuxAdapter, err = secondary.NewTmuxAdapter(cfg)
+	tmuxAdapter, err = secondary.NewTmuxAdapter(ctx, cfg)
 	if err != nil {
 		fmt.Fprintf(os.Stdout, "error creating tmux adapter: %s\n", err.Error())
 		os.Exit(1)
 	}
 
-	tmux, err = domain.NewTmux(tmuxAdapter)
+	tmuxService, err = service.NewTmuxService(tmuxAdapter)
+	if err != nil {
+		fmt.Fprintf(os.Stdout, "error creating tmux service: %s\n", err.Error())
+		os.Exit(1)
+	}
+
+	tmux, err = domain.NewTmux(tmuxService)
 	if err != nil {
 		fmt.Fprintf(os.Stdout, "error creating tmux orchestrator: %s\n", err.Error())
 		os.Exit(1)

@@ -11,8 +11,10 @@ type TmuxService struct {
 	adapter ports.TmuxPort
 }
 
-func NewTmuxService() (*TmuxService, error) {
-	return &TmuxService{}, nil
+func NewTmuxService(adapter ports.TmuxPort) (*TmuxService, error) {
+	return &TmuxService{
+		adapter: adapter,
+	}, nil
 }
 
 func (s *TmuxService) SessionExists(ctx context.Context) (int, error) {

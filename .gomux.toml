@@ -1,4 +1,4 @@
-title = "GoMux Config"
+title = "Example GoMux Config"
 
 [config]
 session = "SessionName"
