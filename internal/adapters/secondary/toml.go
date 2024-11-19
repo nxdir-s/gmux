@@ -30,6 +30,7 @@ func (e *ErrUnmarshalToml) Error() string {
 type Config struct {
 	Session     string `toml:"session"`
 	Project     string `toml:"project"`
+	EditorCmd   string `toml:"editor_cmd"`
 	ServerCmd   string `toml:"server_cmd"`
 	DockerCmd   string `toml:"docker_cmd"`
 	DatabaseCmd string `toml:"database_cmd"`
@@ -57,6 +58,7 @@ func (a *TomlAdapter) LoadConfig() (*valobj.Config, error) {
 	return &valobj.Config{
 		Session:     a.cfg.Session,
 		ProjectDir:  a.cfg.Project,
+		EditorCmd:   a.cfg.EditorCmd,
 		ServerCmd:   a.cfg.ServerCmd,
 		DockerCmd:   a.cfg.DockerCmd,
 		DatabaseCmd: a.cfg.DatabaseCmd,

@@ -4,6 +4,7 @@ import (
 	"context"
 	"os/exec"
 
+	"github.com/nxdir-s/gomux/internal/core/entity/tmux"
 	"github.com/nxdir-s/gomux/internal/core/valobj"
 )
 
@@ -18,17 +19,21 @@ type TmuxAdapter struct {
 	cmds *TmuxCmds
 }
 
-func NewTmuxAdapter(config *valobj.Config) (*TmuxAdapter, error) {
-	return &TmuxAdapter{
+func NewTmuxAdapter(ctx context.Context, config *valobj.Config) (*TmuxAdapter, error) {
+	adapter := &TmuxAdapter{
 		cfg: config,
-	}, nil
+	}
+
+	adapter.SetupCmds(ctx)
+
+	return adapter, nil
 }
 
 func (a *TmuxAdapter) SetupCmds(ctx context.Context) {
 	commands := &TmuxCmds{
-		HasSession:   exec.CommandContext(ctx, "tmux", "has-session", "-t "+a.cfg.Session, "2>/dev/null"),
-		NewSession:   exec.CommandContext(ctx, "tmux", "new-session", "-d", "-s "+a.cfg.Session, "-n editor"),
-		SelectWindow: exec.CommandContext(ctx, "tmux", "select-window", "-t "+a.cfg.Session+":editor"),
+		HasSession:   exec.CommandContext(ctx, tmux.Alias, string(tmux.HasSessionCmd), "-t "+a.cfg.Session, "2>/dev/null"),
+		NewSession:   exec.CommandContext(ctx, tmux.Alias, string(tmux.NewSessionCmd), "-d", "-s "+a.cfg.Session, "-n editor"),
+		SelectWindow: exec.CommandContext(ctx, tmux.Alias, string(tmux.SelectWindowCmd), "-t "+a.cfg.Session+":editor"),
 	}
 
 	a.cmds = commands
@@ -36,10 +41,10 @@ func (a *TmuxAdapter) SetupCmds(ctx context.Context) {
 
 func (a *TmuxAdapter) HasSession(ctx context.Context) (int, error) {
 	if err := a.cmds.HasSession.Run(); err != nil {
-		return 0, err
+		return tmux.SessionNotExists, err
 	}
 
-	return 1, nil
+	return tmux.SessionExists, nil
 }
 
 func (a *TmuxAdapter) NewSession(ctx context.Context) error {
@@ -51,7 +56,7 @@ func (a *TmuxAdapter) NewSession(ctx context.Context) error {
 }
 
 func (a *TmuxAdapter) AttachSession(ctx context.Context) error {
-	cmd := exec.CommandContext(ctx, "tmux", "attach-session", "-t "+a.cfg.Session)
+	cmd := exec.CommandContext(ctx, tmux.Alias, string(tmux.AttachCmd), "-t "+a.cfg.Session)
 
 	if err := cmd.Run(); err != nil {
 		return err
@@ -60,8 +65,8 @@ func (a *TmuxAdapter) AttachSession(ctx context.Context) error {
 	return nil
 }
 
-func (a *TmuxAdapter) SendKeys(ctx context.Context, windowName string, keyCmd string) error {
-	cmd := exec.CommandContext(ctx, "tmux", "send-keys", "-t "+a.cfg.Session+":"+windowName, keyCmd, "C-m")
+func (a *TmuxAdapter) SendKeys(ctx context.Context, window tmux.Window, keyCmd string) error {
+	cmd := exec.CommandContext(ctx, tmux.Alias, string(tmux.SendKeysCmd), "-t "+a.cfg.Session+":"+window.Name(), keyCmd, "C-m")
 
 	if err := cmd.Run(); err != nil {
 		return err
@@ -70,8 +75,8 @@ func (a *TmuxAdapter) SendKeys(ctx context.Context, windowName string, keyCmd st
 	return nil
 }
 
-func (a *TmuxAdapter) NewWindow(ctx context.Context, name string) error {
-	cmd := exec.CommandContext(ctx, "tmux", "new-window", "-t "+a.cfg.Session, "-n "+name)
+func (a *TmuxAdapter) NewWindow(ctx context.Context, window tmux.Window) error {
+	cmd := exec.CommandContext(ctx, tmux.Alias, string(tmux.NewWindowCmd), "-t "+a.cfg.Session, "-n "+window.Name())
 
 	if err := cmd.Run(); err != nil {
 		return err
@@ -80,8 +85,10 @@ func (a *TmuxAdapter) NewWindow(ctx context.Context, name string) error {
 	return nil
 }
 
-func (a *TmuxAdapter) SelectWindow(ctx context.Context) error {
-	if err := a.cmds.SelectWindow.Run(); err != nil {
+func (a *TmuxAdapter) SelectWindow(ctx context.Context, window tmux.Window) error {
+	cmd := exec.CommandContext(ctx, tmux.Alias, string(tmux.SelectWindowCmd), "-t "+a.cfg.Session+":"+window.Name())
+
+	if err := cmd.Run(); err != nil {
 		return err
 	}
 
