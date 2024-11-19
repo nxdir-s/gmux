@@ -16,17 +16,35 @@ func main() {
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer cancel()
 
+	// domains
 	var tmux ports.Tmux
-	var adapter ports.TmuxPort
+
+	// secondary adapters
+	var tmuxAdapter ports.TmuxPort
+	var config ports.ConfigPort
+
+	// primary adapters
 	var cli ports.CLIPort
 
-	adapter, err := secondary.NewTmuxAdapter()
+	config, err := secondary.NewTomlAdapter()
+	if err != nil {
+		fmt.Fprintf(os.Stdout, "error creating config adapter: %s\n", err.Error())
+		os.Exit(1)
+	}
+
+	cfg, err := config.LoadConfig()
+	if err != nil {
+		fmt.Fprintf(os.Stdout, "error loading config: %s\n", err.Error())
+		os.Exit(1)
+	}
+
+	tmuxAdapter, err = secondary.NewTmuxAdapter(cfg)
 	if err != nil {
 		fmt.Fprintf(os.Stdout, "error creating tmux adapter: %s\n", err.Error())
 		os.Exit(1)
 	}
 
-	tmux, err = domain.NewTmux(adapter)
+	tmux, err = domain.NewTmux(tmuxAdapter)
 	if err != nil {
 		fmt.Fprintf(os.Stdout, "error creating tmux orchestrator: %s\n", err.Error())
 		os.Exit(1)
