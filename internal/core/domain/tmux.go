@@ -1,11 +1,19 @@
 package domain
 
-import "context"
+import (
+	"context"
 
-type Tmux struct{}
+	"github.com/nxdir-s/gomux/internal/ports"
+)
 
-func NewTmux() (*Tmux, error) {
-	return &Tmux{}, nil
+type Tmux struct {
+	adapter ports.TmuxPort
+}
+
+func NewTmux(adapter ports.TmuxPort) (*Tmux, error) {
+	return &Tmux{
+		adapter: adapter,
+	}, nil
 }
 
 func (d *Tmux) Start(ctx context.Context) error {
