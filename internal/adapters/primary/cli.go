@@ -1,13 +1,21 @@
 package primary
 
-import "context"
+import (
+	"context"
 
-type CLIAdapter struct{}
+	"github.com/nxdir-s/gomux/internal/ports"
+)
 
-func NewCLIAdapter() (*CLIAdapter, error) {
-	return &CLIAdapter{}, nil
+type CLIAdapter struct {
+	tmux ports.Tmux
 }
 
-func (a *CLIAdapter) Start(ctx context.Context) error {
+func NewCLIAdapter(tmux ports.Tmux) (*CLIAdapter, error) {
+	return &CLIAdapter{
+		tmux: tmux,
+	}, nil
+}
+
+func (a *CLIAdapter) TmuxStart(ctx context.Context) error {
 	return nil
 }
