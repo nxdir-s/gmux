@@ -1,0 +1,8 @@
+title = "GoMux Config"
+
+[cli]
+session = "SessionName"
+project = "~/projects/myproject"
+server_cmd = ""
+docker_cmd = ""
+database_cmd = ""
