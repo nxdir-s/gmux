@@ -2,5 +2,5 @@ package config
 
 type Window struct {
 	Name string
-	Cmd  string
+	Cmd  []string
 }

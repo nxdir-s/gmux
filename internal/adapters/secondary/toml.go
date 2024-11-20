@@ -36,8 +36,8 @@ type Config struct {
 }
 
 type Window struct {
-	Name string `toml:"name"`
-	Cmd  string `toml:"cmd"`
+	Name string   `toml:"name"`
+	Cmd  []string `toml:"cmd"`
 }
 
 type TomlAdapter struct{}
