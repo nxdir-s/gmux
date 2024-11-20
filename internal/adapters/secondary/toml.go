@@ -41,7 +41,7 @@ type Window struct {
 }
 
 type TomlAdapter struct {
-	cfg *Config
+	cfg *entity.Config
 }
 
 func NewTomlAdapter() (*TomlAdapter, error) {
@@ -49,28 +49,38 @@ func NewTomlAdapter() (*TomlAdapter, error) {
 }
 
 func (a *TomlAdapter) LoadConfig() (*entity.Config, error) {
+	if a.cfg != nil {
+		return a.cfg, nil
+	}
+
 	data, err := os.ReadFile(ConfigFile)
 	if err != nil {
 		return nil, &ErrReadCfg{err}
 	}
 
-	err = toml.Unmarshal(data, a.cfg)
+	var cfg Config
+	err = toml.Unmarshal(data, &cfg)
 	if err != nil {
 		return nil, &ErrUnmarshalToml{err}
 	}
 
-	windows := make([]config.Window, 0, len(a.cfg.Windows))
-	for _, window := range a.cfg.Windows {
+	windows := make([]config.Window, 0, len(cfg.Windows))
+
+	for _, window := range cfg.Windows {
 		windows = append(windows, config.Window{
 			Name: window.Name,
 			Cmd:  window.Cmd,
 		})
 	}
 
-	return &entity.Config{
-		Session:    a.cfg.Session,
-		Project:    a.cfg.Project,
-		StartIndex: a.cfg.StartIndex,
+	config := &entity.Config{
+		Session:    cfg.Session,
+		Project:    cfg.Project,
+		StartIndex: cfg.StartIndex,
 		Windows:    windows,
-	}, nil
+	}
+
+	a.cfg = config
+
+	return config, nil
 }
