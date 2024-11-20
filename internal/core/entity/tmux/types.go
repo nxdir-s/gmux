@@ -17,31 +17,3 @@ const (
 	AttachCmd       Command = "attach-session"
 	SendKeysCmd     Command = "send-keys"
 )
-
-type WindowName string
-
-const (
-	EditorWindow   WindowName = "editor"
-	DockerWindow   WindowName = "docker"
-	DatabaseWindow WindowName = "database"
-)
-
-type Window int
-
-const (
-	_ Window = iota
-	Editor
-	Docker
-	Database
-)
-
-func (w Window) Name() string {
-	switch w {
-	case Docker:
-		return string(DockerWindow)
-	case Database:
-		return string(DatabaseWindow)
-	default:
-		return ""
-	}
-}
