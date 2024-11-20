@@ -8,7 +8,7 @@ import (
 
 type TmuxPort interface {
 	HasSession(ctx context.Context) (int, error)
-	NewSession(ctx context.Context) error
+	NewSession(ctx context.Context, name string) error
 	AttachSession(ctx context.Context) error
 	SendKeys(ctx context.Context, name string, keyCmd string) error
 	NewWindow(ctx context.Context, cfgIndex int) error

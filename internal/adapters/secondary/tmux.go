@@ -20,35 +20,25 @@ type TmuxAdapter struct {
 }
 
 func NewTmuxAdapter(ctx context.Context, config *entity.Config) (*TmuxAdapter, error) {
-	adapter := &TmuxAdapter{
+	return &TmuxAdapter{
 		cfg: config,
-	}
-
-	adapter.SetupCmds(ctx)
-
-	return adapter, nil
-}
-
-func (a *TmuxAdapter) SetupCmds(ctx context.Context) {
-	commands := &TmuxCmds{
-		HasSession:   exec.CommandContext(ctx, tmux.Alias, string(tmux.HasSessionCmd), "-t "+a.cfg.Session, "2>/dev/null"),
-		NewSession:   exec.CommandContext(ctx, tmux.Alias, string(tmux.NewSessionCmd), "-d", "-s "+a.cfg.Session, "-n editor"),
-		SelectWindow: exec.CommandContext(ctx, tmux.Alias, string(tmux.SelectWindowCmd), "-t "+a.cfg.Session+":editor"),
-	}
-
-	a.cmds = commands
+	}, nil
 }
 
 func (a *TmuxAdapter) HasSession(ctx context.Context) (int, error) {
-	if err := a.cmds.HasSession.Run(); err != nil {
+	cmd := exec.CommandContext(ctx, tmux.Alias, string(tmux.HasSessionCmd), "-t "+a.cfg.Session)
+
+	if err := cmd.Run(); err != nil {
 		return tmux.SessionNotExists, err
 	}
 
 	return tmux.SessionExists, nil
 }
 
-func (a *TmuxAdapter) NewSession(ctx context.Context) error {
-	if err := a.cmds.NewSession.Run(); err != nil {
+func (a *TmuxAdapter) NewSession(ctx context.Context, name string) error {
+	cmd := exec.CommandContext(ctx, tmux.Alias, string(tmux.NewSessionCmd), "-d", "-s "+a.cfg.Session, "-n "+name)
+
+	if err := cmd.Run(); err != nil {
 		return err
 	}
 
