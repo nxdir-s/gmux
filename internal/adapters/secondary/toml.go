@@ -30,7 +30,8 @@ type Config struct {
 	Session    string `toml:"session"`
 	Project    string `toml:"project"`
 	StartIndex int    `toml:"start_index"`
-	Windows    map[any]Window
+
+	Windows map[any]Window
 }
 
 type Window struct {
