@@ -29,12 +29,12 @@ func (s *TmuxService) AttachSession(ctx context.Context) error {
 	return s.adapter.AttachSession(ctx)
 }
 
-func (s *TmuxService) SendKeys(ctx context.Context, window tmux.Window, keyCmd string) error {
-	return s.adapter.SendKeys(ctx, window, keyCmd)
+func (s *TmuxService) SendKeys(ctx context.Context, cfgIndex int) error {
+	return s.adapter.SendKeys(ctx, cfgIndex)
 }
 
-func (s *TmuxService) NewWindow(ctx context.Context, window tmux.Window) error {
-	return s.adapter.NewWindow(ctx, window)
+func (s *TmuxService) NewWindow(ctx context.Context, cfgIndex int) error {
+	return s.adapter.NewWindow(ctx, cfgIndex)
 }
 
 func (s *TmuxService) SelectWindow(ctx context.Context, window tmux.Window) error {
