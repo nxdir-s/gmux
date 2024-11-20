@@ -9,10 +9,10 @@ type Tmux interface {
 }
 
 type TmuxService interface {
-	SessionExists(ctx context.Context) (int, error)
+	SessionExists(ctx context.Context) int
 	NewSession(ctx context.Context, name string) error
 	AttachSession(ctx context.Context) error
-	SendKeys(ctx context.Context, name string, keyCmd string) error
+	SendKeys(ctx context.Context, name string, args ...string) error
 	NewWindow(ctx context.Context, cfgIndex int) error
 	SelectWindow(ctx context.Context, cfgIndex int) error
 }

@@ -1,6 +1,5 @@
 title = "Example GoMux Config"
 
-[config]
 session = "gomux"
 project = "~/Developer/gomux"
 start_index = 0
