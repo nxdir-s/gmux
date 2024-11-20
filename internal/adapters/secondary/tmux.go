@@ -27,7 +27,7 @@ func (a *TmuxAdapter) HasSession(ctx context.Context) int {
 
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		fmt.Fprintf(os.Stdout, "%s failed, output: %s\n", string(tmux.HasSessionCmd), string(output))
+		fmt.Fprintf(os.Stdout, "%s output: %s\n", string(tmux.HasSessionCmd), string(output))
 
 		return tmux.SessionNotExists
 	}
