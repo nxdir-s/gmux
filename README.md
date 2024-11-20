@@ -21,7 +21,7 @@ $ gomux
 
 ### Configuration
 
-GoMux can be configured using a toml file named `gomux.toml`. Tmux windows can be configured by adding `windows` sub-tables. A window
+GoMux can be configured using a toml file named `.gomux.toml`. Tmux windows can be configured by adding `windows` sub-tables. A window
 requires a `name` and a `cmd` that will be executed
 
 #### Example Config
