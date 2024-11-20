@@ -27,12 +27,12 @@ func (a *TmuxAdapter) HasSession(ctx context.Context) int {
 
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		fmt.Fprintf(os.Stdout, "%s\n", string(output))
+		fmt.Fprintf(os.Stdout, "%s failed, output: %s\n", string(tmux.HasSessionCmd), string(output))
 
 		return tmux.SessionNotExists
 	}
 
-	fmt.Fprintf(os.Stdout, "%s cmd output: %s\n", string(tmux.HasSessionCmd), string(output))
+	fmt.Fprintf(os.Stdout, "%s output: %s\n", string(tmux.HasSessionCmd), string(output))
 
 	return tmux.SessionExists
 }
@@ -44,12 +44,12 @@ func (a *TmuxAdapter) NewSession(ctx context.Context, name string) error {
 
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		fmt.Fprintf(os.Stdout, "failed %s cmd, output: %s\n", string(tmux.NewSessionCmd), string(output))
+		fmt.Fprintf(os.Stdout, "%s failed, output: %s\n", string(tmux.NewSessionCmd), string(output))
 
 		return err
 	}
 
-	fmt.Fprintf(os.Stdout, "%s cmd output: %s\n", string(tmux.NewSessionCmd), string(output))
+	fmt.Fprintf(os.Stdout, "%s output: %s\n", string(tmux.NewSessionCmd), string(output))
 
 	return nil
 }
@@ -60,12 +60,12 @@ func (a *TmuxAdapter) AttachSession(ctx context.Context) error {
 
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		fmt.Fprintf(os.Stdout, "failed %s cmd, output: %s\n", string(tmux.AttachCmd), string(output))
+		fmt.Fprintf(os.Stdout, "%s failed, output: %s\n", string(tmux.AttachCmd), string(output))
 
 		return err
 	}
 
-	fmt.Fprintf(os.Stdout, "%s cmd output: %s\n", string(tmux.AttachCmd), string(output))
+	fmt.Fprintf(os.Stdout, "%s output: %s\n", string(tmux.AttachCmd), string(output))
 
 	return nil
 }
@@ -78,12 +78,12 @@ func (a *TmuxAdapter) SendKeys(ctx context.Context, name string, args ...string)
 
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		fmt.Fprintf(os.Stdout, "failed %s cmd, output: %s\n", string(tmux.SendKeysCmd), string(output))
+		fmt.Fprintf(os.Stdout, "%s failed, output: %s\n", string(tmux.SendKeysCmd), string(output))
 
 		return err
 	}
 
-	fmt.Fprintf(os.Stdout, "%s cmd output: %s\n", string(tmux.SendKeysCmd), string(output))
+	fmt.Fprintf(os.Stdout, "%s output: %s\n", string(tmux.SendKeysCmd), string(output))
 
 	return nil
 }
@@ -93,12 +93,12 @@ func (a *TmuxAdapter) NewWindow(ctx context.Context, cfgIndex int) error {
 
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		fmt.Fprintf(os.Stdout, "failed %s cmd, output: %s\n", string(tmux.NewWindowCmd), string(output))
+		fmt.Fprintf(os.Stdout, "%s failed, output: %s\n", string(tmux.NewWindowCmd), string(output))
 
 		return err
 	}
 
-	fmt.Fprintf(os.Stdout, "%s cmd output: %s\n", string(tmux.NewWindowCmd), string(output))
+	fmt.Fprintf(os.Stdout, "%s output: %s\n", string(tmux.NewWindowCmd), string(output))
 
 	return nil
 }
@@ -108,12 +108,12 @@ func (a *TmuxAdapter) SelectWindow(ctx context.Context, cfgIndex int) error {
 
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		fmt.Fprintf(os.Stdout, "failed %s cmd, output: %s\n", string(tmux.SelectWindowCmd), string(output))
+		fmt.Fprintf(os.Stdout, "%s failed, output: %s\n", string(tmux.SelectWindowCmd), string(output))
 
 		return err
 	}
 
-	fmt.Fprintf(os.Stdout, "%s cmd output: %s\n", string(tmux.SelectWindowCmd), string(output))
+	fmt.Fprintf(os.Stdout, "%s output: %s\n", string(tmux.SelectWindowCmd), string(output))
 
 	return nil
 }

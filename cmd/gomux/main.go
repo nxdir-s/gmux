@@ -27,7 +27,7 @@ func main() {
 	var tmuxAdapter ports.TmuxPort
 	var config ports.ConfigPort
 
-	// primary adapters
+	// primary adapter
 	var cli ports.CLIPort
 
 	config, err := secondary.NewTomlAdapter()
