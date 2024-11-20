@@ -1,6 +1,7 @@
 package secondary
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/nxdir-s/gomux/internal/core/entity"
@@ -56,6 +57,8 @@ func (a *TomlAdapter) LoadConfig() (*entity.Config, error) {
 	if err := toml.Unmarshal(data, &cfg); err != nil {
 		return nil, &ErrUnmarshalToml{err}
 	}
+
+	fmt.Fprintf(os.Stdout, "config: %+v\n", cfg)
 
 	windows := make([]config.Window, 0, len(cfg.Windows))
 

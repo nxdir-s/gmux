@@ -10,6 +10,10 @@ import (
 	"github.com/nxdir-s/gomux/internal/core/entity/tmux"
 )
 
+const (
+	EnterCmd string = "C-m"
+)
+
 type TmuxAdapter struct {
 	cfg *entity.Config
 }
@@ -27,7 +31,7 @@ func (a *TmuxAdapter) HasSession(ctx context.Context) int {
 
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		fmt.Fprintf(os.Stdout, "failed %s cmd, output: %s\n", string(tmux.HasSessionCmd), string(output))
+		fmt.Fprintf(os.Stdout, "%s\n", string(output))
 
 		return tmux.SessionNotExists
 	}
@@ -38,9 +42,9 @@ func (a *TmuxAdapter) HasSession(ctx context.Context) int {
 }
 
 func (a *TmuxAdapter) NewSession(ctx context.Context, name string) error {
-	cmd := exec.CommandContext(ctx, tmux.Alias, string(tmux.NewSessionCmd), "-d", "-s", a.cfg.Session, "-n", name)
+	cmd := exec.CommandContext(ctx, tmux.Alias, string(tmux.NewSessionCmd), "-d", "-s", a.cfg.Session)
 
-	fmt.Fprintf(os.Stdout, "creating new session named '%s'\n", name)
+	fmt.Fprintf(os.Stdout, "creating new session named '%s'\n", a.cfg.Session)
 
 	output, err := cmd.CombinedOutput()
 	if err != nil {
