@@ -1,6 +1,6 @@
 # GoMux
 
-GoMux is a CLI tool that helps with setting up tmux for a project
+GoMux is a CLI tool that helps with tmux setup for your projects
 
 ## Installation
 
@@ -19,7 +19,7 @@ run `gomux` to automatically setup tmux using a config file
 
 GoMux can be configured using a toml file named `.gomux.toml`
 
-#### Example
+#### Example Config
 
 ```toml
 title = "Example GoMux Config"
@@ -45,5 +45,5 @@ cmd = "psql"
 
 [windows.server]
 name = "server"
-cmd = "go run cmd/main.go"
+cmd = "go run cmd/server/main.go"
 ```
