@@ -40,9 +40,7 @@ type Window struct {
 	Cmd  string `toml:"cmd"`
 }
 
-type TomlAdapter struct {
-	cfg *entity.Config
-}
+type TomlAdapter struct{}
 
 func NewTomlAdapter() (*TomlAdapter, error) {
 	return &TomlAdapter{}, nil
@@ -68,14 +66,10 @@ func (a *TomlAdapter) LoadConfig() (*entity.Config, error) {
 		})
 	}
 
-	config := &entity.Config{
+	return &entity.Config{
 		Session:    cfg.Session,
 		Project:    cfg.Project,
 		StartIndex: cfg.StartIndex,
 		Windows:    windows,
-	}
-
-	a.cfg = config
-
-	return config, nil
+	}, nil
 }
