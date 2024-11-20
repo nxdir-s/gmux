@@ -81,8 +81,10 @@ func (d *Tmux) SetupSession(ctx context.Context) error {
 }
 
 func (d *Tmux) SetupWindow(ctx context.Context, cfgIndex int) error {
-	if err := d.service.NewWindow(ctx, cfgIndex); err != nil {
-		return &ErrWindowSetup{err}
+	if cfgIndex != 0 {
+		if err := d.service.NewWindow(ctx, cfgIndex); err != nil {
+			return &ErrWindowSetup{err}
+		}
 	}
 
 	// if err := d.GoToProject(ctx, cfgIndex); err != nil {
