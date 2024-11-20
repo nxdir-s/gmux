@@ -13,18 +13,22 @@ $ go install github.com/nxdir-s/gomux/cmd/gomux@latest
 ## Usage
 
 GoMux is intended to be used to setup your tmux windows for a project. While in your project directory
-run `gomux` to automatically setup tmux using a config file
+run the following to automatically setup tmux using a config file
+
+```shell
+$ gomux
+```
 
 ### Configuration
 
-GoMux can be configured using a toml file named `gomux.toml`
+GoMux can be configured using a toml file named `gomux.toml`. Tmux windows can be configured by creating a `windows` sub-table. A window
+requires a `name` and a `cmd` that will be executed
 
 #### Example Config
 
 ```toml
 title = 'Example GoMux Config'
 
-[config]
 session = 'SessionName'
 start_index = 0
 
