@@ -48,7 +48,7 @@ func (d *Tmux) Attach(ctx context.Context) error {
 }
 
 func (d *Tmux) SetupSession(ctx context.Context) error {
-	if err := d.service.NewSession(ctx, d.cfg.Session); err != nil {
+	if err := d.service.NewSession(ctx, d.cfg.Windows[d.cfg.StartIndex].Name); err != nil {
 		return err
 	}
 
