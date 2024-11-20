@@ -10,6 +10,7 @@ const (
 type Command string
 
 const (
+	EnterCmd        Command = "C-m"
 	HasSessionCmd   Command = "has-session"
 	NewSessionCmd   Command = "new-session"
 	NewWindowCmd    Command = "new-window"

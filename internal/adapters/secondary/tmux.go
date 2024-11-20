@@ -10,10 +10,6 @@ import (
 	"github.com/nxdir-s/gomux/internal/core/entity/tmux"
 )
 
-const (
-	EnterCmd string = "C-m"
-)
-
 type TmuxAdapter struct {
 	cfg *entity.Config
 }
