@@ -4,8 +4,8 @@ import (
 	"context"
 	"os/exec"
 
+	"github.com/nxdir-s/gomux/internal/core/entity"
 	"github.com/nxdir-s/gomux/internal/core/entity/tmux"
-	"github.com/nxdir-s/gomux/internal/core/valobj"
 )
 
 type TmuxCmds struct {
@@ -15,11 +15,11 @@ type TmuxCmds struct {
 }
 
 type TmuxAdapter struct {
-	cfg  *valobj.Config
+	cfg  *entity.Config
 	cmds *TmuxCmds
 }
 
-func NewTmuxAdapter(ctx context.Context, config *valobj.Config) (*TmuxAdapter, error) {
+func NewTmuxAdapter(ctx context.Context, config *entity.Config) (*TmuxAdapter, error) {
 	adapter := &TmuxAdapter{
 		cfg: config,
 	}
@@ -65,8 +65,8 @@ func (a *TmuxAdapter) AttachSession(ctx context.Context) error {
 	return nil
 }
 
-func (a *TmuxAdapter) SendKeys(ctx context.Context, window tmux.Window, keyCmd string) error {
-	cmd := exec.CommandContext(ctx, tmux.Alias, string(tmux.SendKeysCmd), "-t "+a.cfg.Session+":"+window.Name(), keyCmd, "C-m")
+func (a *TmuxAdapter) SendKeys(ctx context.Context, name string, keyCmd string) error {
+	cmd := exec.CommandContext(ctx, tmux.Alias, string(tmux.SendKeysCmd), "-t "+a.cfg.Session+":"+name, keyCmd, "C-m")
 
 	if err := cmd.Run(); err != nil {
 		return err
@@ -75,8 +75,8 @@ func (a *TmuxAdapter) SendKeys(ctx context.Context, window tmux.Window, keyCmd s
 	return nil
 }
 
-func (a *TmuxAdapter) NewWindow(ctx context.Context, window tmux.Window) error {
-	cmd := exec.CommandContext(ctx, tmux.Alias, string(tmux.NewWindowCmd), "-t "+a.cfg.Session, "-n "+window.Name())
+func (a *TmuxAdapter) NewWindow(ctx context.Context, cfgIndex int) error {
+	cmd := exec.CommandContext(ctx, tmux.Alias, string(tmux.NewWindowCmd), "-t "+a.cfg.Session, "-n "+a.cfg.Windows[cfgIndex].Name)
 
 	if err := cmd.Run(); err != nil {
 		return err
@@ -85,8 +85,8 @@ func (a *TmuxAdapter) NewWindow(ctx context.Context, window tmux.Window) error {
 	return nil
 }
 
-func (a *TmuxAdapter) SelectWindow(ctx context.Context, window tmux.Window) error {
-	cmd := exec.CommandContext(ctx, tmux.Alias, string(tmux.SelectWindowCmd), "-t "+a.cfg.Session+":"+window.Name())
+func (a *TmuxAdapter) SelectWindow(ctx context.Context, cfgIndex int) error {
+	cmd := exec.CommandContext(ctx, tmux.Alias, string(tmux.SelectWindowCmd), "-t "+a.cfg.Session+":"+a.cfg.Windows[cfgIndex].Name)
 
 	if err := cmd.Run(); err != nil {
 		return err

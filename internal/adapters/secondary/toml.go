@@ -3,7 +3,8 @@ package secondary
 import (
 	"os"
 
-	"github.com/nxdir-s/gomux/internal/core/valobj"
+	"github.com/nxdir-s/gomux/internal/core/entity"
+	"github.com/nxdir-s/gomux/internal/core/entity/config"
 	"github.com/pelletier/go-toml/v2"
 )
 
@@ -28,12 +29,15 @@ func (e *ErrUnmarshalToml) Error() string {
 }
 
 type Config struct {
-	Session     string `toml:"session"`
-	Project     string `toml:"project"`
-	EditorCmd   string `toml:"editor_cmd"`
-	ServerCmd   string `toml:"server_cmd"`
-	DockerCmd   string `toml:"docker_cmd"`
-	DatabaseCmd string `toml:"database_cmd"`
+	Session    string `toml:"session"`
+	Project    string `toml:"project"`
+	StartIndex int    `toml:"start_index"`
+	Windows    map[any]Window
+}
+
+type Window struct {
+	Name string `toml:"name"`
+	Cmd  string `toml:"cmd"`
 }
 
 type TomlAdapter struct {
@@ -44,7 +48,7 @@ func NewTomlAdapter() (*TomlAdapter, error) {
 	return &TomlAdapter{}, nil
 }
 
-func (a *TomlAdapter) LoadConfig() (*valobj.Config, error) {
+func (a *TomlAdapter) LoadConfig() (*entity.Config, error) {
 	data, err := os.ReadFile(ConfigFile)
 	if err != nil {
 		return nil, &ErrReadCfg{err}
@@ -55,12 +59,18 @@ func (a *TomlAdapter) LoadConfig() (*valobj.Config, error) {
 		return nil, &ErrUnmarshalToml{err}
 	}
 
-	return &valobj.Config{
-		Session:     a.cfg.Session,
-		ProjectDir:  a.cfg.Project,
-		EditorCmd:   a.cfg.EditorCmd,
-		ServerCmd:   a.cfg.ServerCmd,
-		DockerCmd:   a.cfg.DockerCmd,
-		DatabaseCmd: a.cfg.DatabaseCmd,
+	windows := make([]config.Window, 0, len(a.cfg.Windows))
+	for _, window := range a.cfg.Windows {
+		windows = append(windows, config.Window{
+			Name: window.Name,
+			Cmd:  window.Cmd,
+		})
+	}
+
+	return &entity.Config{
+		Session:    a.cfg.Session,
+		Project:    a.cfg.Project,
+		StartIndex: a.cfg.StartIndex,
+		Windows:    windows,
 	}, nil
 }
