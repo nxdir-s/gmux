@@ -16,7 +16,7 @@ func NewTmuxService(adapter ports.TmuxPort) (*TmuxService, error) {
 	}, nil
 }
 
-func (s *TmuxService) SessionExists(ctx context.Context) (int, error) {
+func (s *TmuxService) SessionExists(ctx context.Context) int {
 	return s.adapter.HasSession(ctx)
 }
 
@@ -28,8 +28,8 @@ func (s *TmuxService) NewWindow(ctx context.Context, cfgIndex int) error {
 	return s.adapter.NewWindow(ctx, cfgIndex)
 }
 
-func (s *TmuxService) SendKeys(ctx context.Context, name string, keyCmd string) error {
-	return s.adapter.SendKeys(ctx, name, keyCmd)
+func (s *TmuxService) SendKeys(ctx context.Context, name string, args ...string) error {
+	return s.adapter.SendKeys(ctx, name, args...)
 }
 
 func (s *TmuxService) AttachSession(ctx context.Context) error {

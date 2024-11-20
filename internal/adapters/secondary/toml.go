@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	ConfigFile string = ".gomux.toml"
+	ConfigFile string = "gomux.toml"
 )
 
 type ErrReadCfg struct {
@@ -49,10 +49,6 @@ func NewTomlAdapter() (*TomlAdapter, error) {
 }
 
 func (a *TomlAdapter) LoadConfig() (*entity.Config, error) {
-	if a.cfg != nil {
-		return a.cfg, nil
-	}
-
 	data, err := os.ReadFile(ConfigFile)
 	if err != nil {
 		return nil, &ErrReadCfg{err}
