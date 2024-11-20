@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	ConfigFile string = "gomux.toml"
+	ConfigFile string = ".gomux.toml"
 )
 
 type ErrReadCfg struct {
