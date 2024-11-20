@@ -11,14 +11,6 @@ start_index = 0
 name = "editor"
 cmd = "vim ."
 
-[windows.docker]
-name = "docker"
-cmd = "docker compose up"
-
-[windows.database]
-name = "database"
-cmd = "psql"
-
-[windows.server]
-name = "server"
-cmd = "go run cmd/main.go"
+[windows.htop]
+name = "htop"
+cmd = "htop"

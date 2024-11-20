@@ -20,8 +20,8 @@ func (s *TmuxService) SessionExists(ctx context.Context) (int, error) {
 	return s.adapter.HasSession(ctx)
 }
 
-func (s *TmuxService) NewSession(ctx context.Context) error {
-	return s.adapter.NewSession(ctx)
+func (s *TmuxService) NewSession(ctx context.Context, name string) error {
+	return s.adapter.NewSession(ctx, name)
 }
 
 func (s *TmuxService) NewWindow(ctx context.Context, cfgIndex int) error {
