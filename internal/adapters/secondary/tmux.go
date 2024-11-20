@@ -42,7 +42,7 @@ func (a *TmuxAdapter) HasSession(ctx context.Context) int {
 }
 
 func (a *TmuxAdapter) NewSession(ctx context.Context, name string) error {
-	cmd := exec.CommandContext(ctx, tmux.Alias, string(tmux.NewSessionCmd), "-d", "-s", a.cfg.Session)
+	cmd := exec.CommandContext(ctx, tmux.Alias, string(tmux.NewSessionCmd), "-d", "-s", a.cfg.Session, "-n", name)
 
 	fmt.Fprintf(os.Stdout, "creating new session named '%s'\n", a.cfg.Session)
 
@@ -60,6 +60,7 @@ func (a *TmuxAdapter) NewSession(ctx context.Context, name string) error {
 
 func (a *TmuxAdapter) AttachSession(ctx context.Context) error {
 	cmd := exec.CommandContext(ctx, tmux.Alias, string(tmux.AttachCmd), "-t", a.cfg.Session)
+	cmd.Stdin = os.Stdin
 
 	output, err := cmd.CombinedOutput()
 	if err != nil {

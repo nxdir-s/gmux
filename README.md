@@ -17,33 +17,32 @@ run `gomux` to automatically setup tmux using a config file
 
 ### Configuration
 
-GoMux can be configured using a toml file named `.gomux.toml`
+GoMux can be configured using a toml file named `gomux.toml`
 
 #### Example Config
 
 ```toml
-title = "Example GoMux Config"
+title = 'Example GoMux Config'
 
 [config]
-session = "SessionName"
-project = "~/projects/myproject"
+session = 'SessionName'
 start_index = 0
 
 [windows]
 
 [windows.editor]
-name = "editor"
-cmd = "vim ."
+name = 'editor'
+cmd = ['vim .']
 
 [windows.docker]
-name = "docker"
-cmd = "docker compose up"
+name = 'docker'
+cmd = ['docker compose up']
 
 [windows.database]
-name = "database"
-cmd = "psql"
+name = 'database'
+cmd = 'psql'
 
 [windows.server]
-name = "server"
-cmd = "go run cmd/server/main.go"
+name = 'server'
+cmd = 'go run cmd/server/main.go'
 ```
