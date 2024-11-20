@@ -2,7 +2,7 @@ title = "Example GoMux Config"
 
 [config]
 session = "SessionName"
-project = "~/projects/myproject"
+project = "~/Developer/gomux"
 start_index = 0
 
 [windows]
@@ -22,4 +22,3 @@ cmd = "psql"
 [windows.server]
 name = "server"
 cmd = "go run cmd/main.go"
-
