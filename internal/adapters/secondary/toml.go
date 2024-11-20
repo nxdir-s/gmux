@@ -55,8 +55,7 @@ func (a *TomlAdapter) LoadConfig() (*entity.Config, error) {
 	}
 
 	var cfg Config
-	err = toml.Unmarshal(data, &cfg)
-	if err != nil {
+	if err := toml.Unmarshal(data, &cfg); err != nil {
 		return nil, &ErrUnmarshalToml{err}
 	}
 
