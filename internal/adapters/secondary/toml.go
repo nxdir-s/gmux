@@ -60,10 +60,10 @@ func (a *TomlAdapter) LoadConfig() (*entity.Config, error) {
 
 	windows := make([]config.Window, 0, len(cfg.Windows))
 
-	for _, window := range cfg.Windows {
+	for i := range cfg.Windows {
 		windows = append(windows, config.Window{
-			Name: window.Name,
-			Cmd:  window.Cmd,
+			Name: cfg.Windows[i].Name,
+			Cmd:  cfg.Windows[i].Cmd,
 		})
 	}
 
