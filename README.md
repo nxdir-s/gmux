@@ -40,9 +40,9 @@ cmd = ['docker compose up']
 
 [windows.database]
 name = 'database'
-cmd = 'psql'
+cmd = ['psql']
 
 [windows.server]
 name = 'server'
-cmd = 'go run cmd/server/main.go'
+cmd = ['go run cmd/server/main.go']
 ```
