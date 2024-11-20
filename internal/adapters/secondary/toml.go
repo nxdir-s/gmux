@@ -28,7 +28,6 @@ func (e *ErrUnmarshalToml) Error() string {
 
 type Config struct {
 	Session    string `toml:"session"`
-	Project    string `toml:"project"`
 	StartIndex int    `toml:"start_index"`
 
 	Windows map[any]Window
@@ -69,7 +68,6 @@ func (a *TomlAdapter) LoadConfig() (*entity.Config, error) {
 
 	return &entity.Config{
 		Session:    cfg.Session,
-		Project:    cfg.Project,
 		StartIndex: cfg.StartIndex,
 		Windows:    windows,
 	}, nil
