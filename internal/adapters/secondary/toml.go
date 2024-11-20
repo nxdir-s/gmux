@@ -6,11 +6,8 @@ import (
 
 	"github.com/nxdir-s/gomux/internal/core/entity"
 	"github.com/nxdir-s/gomux/internal/core/entity/config"
+	"github.com/nxdir-s/gomux/internal/core/entity/tmux"
 	"github.com/pelletier/go-toml/v2"
-)
-
-const (
-	ConfigFile string = ".gomux.toml"
 )
 
 type ErrReadCfg struct {
@@ -18,7 +15,7 @@ type ErrReadCfg struct {
 }
 
 func (e *ErrReadCfg) Error() string {
-	return "failed to read " + ConfigFile + ": " + e.err.Error()
+	return "failed to read " + tmux.ConfigFile + ": " + e.err.Error()
 }
 
 type ErrUnmarshalToml struct {
@@ -26,7 +23,7 @@ type ErrUnmarshalToml struct {
 }
 
 func (e *ErrUnmarshalToml) Error() string {
-	return "failed to unmarshal " + ConfigFile + ": " + e.err.Error()
+	return "failed to unmarshal " + tmux.ConfigFile + ": " + e.err.Error()
 }
 
 type Config struct {
@@ -48,7 +45,7 @@ func NewTomlAdapter() (*TomlAdapter, error) {
 }
 
 func (a *TomlAdapter) LoadConfig() (*entity.Config, error) {
-	data, err := os.ReadFile(ConfigFile)
+	data, err := os.ReadFile(tmux.ConfigFile)
 	if err != nil {
 		return nil, &ErrReadCfg{err}
 	}

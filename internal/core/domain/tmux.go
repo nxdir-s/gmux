@@ -24,14 +24,6 @@ func (e *ErrWindowSetup) Error() string {
 	return "failed to setup window: " + e.err.Error()
 }
 
-type ErrCDProject struct {
-	err error
-}
-
-func (e *ErrCDProject) Error() string {
-	return "failed to go to project directory: " + e.err.Error()
-}
-
 type Tmux struct {
 	cfg     *entity.Config
 	service ports.TmuxService
@@ -87,14 +79,6 @@ func (d *Tmux) SetupWindow(ctx context.Context, cfgIndex int) error {
 
 	if err := d.service.SendKeys(ctx, d.cfg.Windows[cfgIndex].Name, d.cfg.Windows[cfgIndex].Cmd...); err != nil {
 		return &ErrWindowSetup{err}
-	}
-
-	return nil
-}
-
-func (d *Tmux) GoToProject(ctx context.Context, cfgIndex int) error {
-	if err := d.service.SendKeys(ctx, d.cfg.Windows[cfgIndex].Name, "cd", d.cfg.Project); err != nil {
-		return &ErrCDProject{err}
 	}
 
 	return nil

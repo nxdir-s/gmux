@@ -28,14 +28,14 @@ func (s *TmuxService) NewWindow(ctx context.Context, cfgIndex int) error {
 	return s.adapter.NewWindow(ctx, cfgIndex)
 }
 
+func (s *TmuxService) SelectWindow(ctx context.Context, cfgIndex int) error {
+	return s.adapter.SelectWindow(ctx, cfgIndex)
+}
+
 func (s *TmuxService) SendKeys(ctx context.Context, name string, args ...string) error {
 	return s.adapter.SendKeys(ctx, name, args...)
 }
 
 func (s *TmuxService) AttachSession(ctx context.Context) error {
 	return s.adapter.AttachSession(ctx)
-}
-
-func (s *TmuxService) SelectWindow(ctx context.Context, cfgIndex int) error {
-	return s.adapter.SelectWindow(ctx, cfgIndex)
 }

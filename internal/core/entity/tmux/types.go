@@ -1,6 +1,9 @@
 package tmux
 
-const Alias string = "tmux"
+const (
+	Alias      string = "tmux"
+	ConfigFile string = ".gomux.toml"
+)
 
 const (
 	SessionExists int = iota

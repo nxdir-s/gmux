@@ -6,14 +6,6 @@ import (
 	"github.com/nxdir-s/gomux/internal/ports"
 )
 
-type ErrStartTmux struct {
-	err error
-}
-
-func (e *ErrStartTmux) Error() string {
-	return "failed to start tmux: " + e.err.Error()
-}
-
 type CLIAdapter struct {
 	tmux ports.Tmux
 }
@@ -26,7 +18,7 @@ func NewCLIAdapter(tmux ports.Tmux) (*CLIAdapter, error) {
 
 func (a *CLIAdapter) TmuxStart(ctx context.Context) error {
 	if err := a.tmux.Start(ctx); err != nil {
-		return &ErrStartTmux{err}
+		return err
 	}
 
 	return nil
