@@ -93,7 +93,7 @@ func (d *Tmux) SetupWindow(ctx context.Context, cfgIndex int) error {
 		return &ErrWindowSetup{err}
 	}
 
-	if err := d.service.SendKeys(ctx, d.cfg.Windows[cfgIndex].Name, d.cfg.Windows[cfgIndex].Cmd); err != nil {
+	if err := d.service.SendKeys(ctx, d.cfg.Windows[cfgIndex].Name, d.cfg.Windows[cfgIndex].Cmd...); err != nil {
 		return &ErrWindowSetup{err}
 	}
 
@@ -101,7 +101,7 @@ func (d *Tmux) SetupWindow(ctx context.Context, cfgIndex int) error {
 }
 
 func (d *Tmux) GoToProject(ctx context.Context, cfgIndex int) error {
-	if err := d.service.SendKeys(ctx, d.cfg.Windows[cfgIndex].Name, "cd "+d.cfg.Project); err != nil {
+	if err := d.service.SendKeys(ctx, d.cfg.Windows[cfgIndex].Name, "cd", d.cfg.Project); err != nil {
 		return &ErrCDProject{err}
 	}
 
