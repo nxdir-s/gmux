@@ -7,7 +7,7 @@ GoMux is a CLI tool that helps with tmux setup for your projects
 Install GoMux with the following
 
 ```shell
-$ go install github.com/nxdir-s/gomux/cmd/cli@latest
+$ go install github.com/nxdir-s/gomux/cmd/gomux@latest
 ```
 
 ## Usage
