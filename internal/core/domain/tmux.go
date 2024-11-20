@@ -8,13 +8,9 @@ import (
 	"github.com/nxdir-s/gomux/internal/ports"
 )
 
-type ErrStartTmux struct {
-	err error
-}
-
-func (e *ErrStartTmux) Error() string {
-	return "failed tmux setup: " + e.err.Error()
-}
+const (
+	EnterCmd string = "C-m"
+)
 
 type ErrSessionSetup struct {
 	err error
@@ -55,12 +51,12 @@ func NewTmux(config *entity.Config, service ports.TmuxService) (*Tmux, error) {
 func (d *Tmux) Start(ctx context.Context) error {
 	if exists := d.service.SessionExists(ctx); exists == tmux.SessionNotExists {
 		if err := d.SetupSession(ctx); err != nil {
-			return &ErrStartTmux{err}
+			return err
 		}
 	}
 
 	if err := d.service.AttachSession(ctx); err != nil {
-		return &ErrStartTmux{err}
+		return err
 	}
 
 	return nil
@@ -89,9 +85,11 @@ func (d *Tmux) SetupWindow(ctx context.Context, cfgIndex int) error {
 		return &ErrWindowSetup{err}
 	}
 
-	if err := d.GoToProject(ctx, cfgIndex); err != nil {
-		return &ErrWindowSetup{err}
-	}
+	// if err := d.GoToProject(ctx, cfgIndex); err != nil {
+	// 	return &ErrWindowSetup{err}
+	// }
+
+	d.cfg.Windows[cfgIndex].Cmd = append(d.cfg.Windows[cfgIndex].Cmd, EnterCmd)
 
 	if err := d.service.SendKeys(ctx, d.cfg.Windows[cfgIndex].Name, d.cfg.Windows[cfgIndex].Cmd...); err != nil {
 		return &ErrWindowSetup{err}
