@@ -1,8 +1,7 @@
 package tmux
 
 const (
-	Alias      string = "tmux"
-	ConfigFile string = ".gomux.toml"
+	Alias string = "tmux"
 )
 
 const (
