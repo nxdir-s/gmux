@@ -77,7 +77,7 @@ func (d *Tmux) SetupWindow(ctx context.Context, cfgIndex int) error {
 
 	d.cfg.Windows[cfgIndex].Cmd = append(d.cfg.Windows[cfgIndex].Cmd, string(tmux.EnterCmd))
 
-	if err := d.service.SendKeys(ctx, d.cfg.Windows[cfgIndex].Name, d.cfg.Windows[cfgIndex].Cmd...); err != nil {
+	if err := d.service.SendKeys(ctx, cfgIndex); err != nil {
 		return &ErrWindowSetup{err}
 	}
 

@@ -116,9 +116,9 @@ func (a *TmuxAdapter) AttachSession(ctx context.Context) error {
 	return nil
 }
 
-func (a *TmuxAdapter) SendKeys(ctx context.Context, name string, args ...string) error {
-	cmdArgs := []string{string(tmux.SendKeysCmd), "-t", a.cfg.Session + ":" + name}
-	cmdArgs = append(cmdArgs, args...)
+func (a *TmuxAdapter) SendKeys(ctx context.Context, cfgIndex int) error {
+	cmdArgs := []string{string(tmux.SendKeysCmd), "-t", a.cfg.Session + ":" + a.cfg.Windows[cfgIndex].Name}
+	cmdArgs = append(cmdArgs, a.cfg.Windows[cfgIndex].Cmd...)
 
 	cmd := exec.CommandContext(ctx, tmux.Alias, cmdArgs...)
 

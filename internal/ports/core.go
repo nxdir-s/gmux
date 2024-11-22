@@ -15,6 +15,6 @@ type TmuxService interface {
 	NewSession(ctx context.Context, name string) error
 	NewWindow(ctx context.Context, cfgIndex int) error
 	SelectWindow(ctx context.Context, cfgIndex int) error
-	SendKeys(ctx context.Context, name string, args ...string) error
+	SendKeys(ctx context.Context, cfgIndex int) error
 	AttachSession(ctx context.Context) error
 }

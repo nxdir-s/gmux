@@ -32,8 +32,8 @@ func (s *TmuxService) SelectWindow(ctx context.Context, cfgIndex int) error {
 	return s.tmux.SelectWindow(ctx, cfgIndex)
 }
 
-func (s *TmuxService) SendKeys(ctx context.Context, name string, args ...string) error {
-	return s.tmux.SendKeys(ctx, name, args...)
+func (s *TmuxService) SendKeys(ctx context.Context, cfgIndex int) error {
+	return s.tmux.SendKeys(ctx, cfgIndex)
 }
 
 func (s *TmuxService) AttachSession(ctx context.Context) error {
