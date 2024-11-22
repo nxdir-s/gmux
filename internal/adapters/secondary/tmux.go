@@ -60,7 +60,7 @@ type TmuxAdapter struct {
 	cfg *entity.Config
 }
 
-func NewTmuxAdapter(ctx context.Context, config *entity.Config) (*TmuxAdapter, error) {
+func NewTmuxAdapter(config *entity.Config) (*TmuxAdapter, error) {
 	return &TmuxAdapter{
 		cfg: config,
 	}, nil

@@ -42,7 +42,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	tmuxAdapter, err = secondary.NewTmuxAdapter(ctx, cfg)
+	tmuxAdapter, err = secondary.NewTmuxAdapter(cfg)
 	if err != nil {
 		fmt.Fprintf(os.Stdout, "error creating tmux adapter: %s\n", err.Error())
 		os.Exit(1)
