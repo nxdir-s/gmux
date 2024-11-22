@@ -69,10 +69,14 @@ func (d *Tmux) SetupSession(ctx context.Context) error {
 }
 
 func (d *Tmux) SetupWindow(ctx context.Context, cfgIndex int) error {
-	if cfgIndex != 0 {
+	if cfgIndex != d.cfg.StartIndex {
 		if err := d.service.NewWindow(ctx, cfgIndex); err != nil {
 			return &ErrWindowSetup{err}
 		}
+	}
+
+	if err := d.service.SelectWindow(ctx, cfgIndex); err != nil {
+		return &ErrWindowSetup{err}
 	}
 
 	d.cfg.Windows[cfgIndex].Cmd = append(d.cfg.Windows[cfgIndex].Cmd, string(tmux.EnterCmd))
