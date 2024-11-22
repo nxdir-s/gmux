@@ -4,7 +4,7 @@ GoMux is a command-line tool that helps with setting up tmux for a project
 
 ## Installation
 
-Install GoMux with the following
+GoMux can be installed with the following command
 
 ```shell
 $ go install github.com/nxdir-s/gomux/cmd/gomux@latest
