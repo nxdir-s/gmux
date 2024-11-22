@@ -12,8 +12,8 @@ $ go install github.com/nxdir-s/gomux/cmd/gomux@latest
 
 ## Usage
 
-GoMux is intended to be used to setup your tmux windows for a project. While in your project directory
-run the following to automatically setup tmux using a config file
+GoMux is intended to be used to setup tmux windows for a project. While in a project directory
+run the following to automatically setup tmux
 
 ```shell
 $ gomux
