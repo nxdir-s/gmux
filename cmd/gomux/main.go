@@ -67,7 +67,7 @@ func main() {
 	}
 
 	if err := cli.TmuxStart(ctx); err != nil {
-		fmt.Fprintf(os.Stdout, "error starting tmux: %s\n", err.Error())
+		fmt.Fprintf(os.Stdout, "failed to start tmux: %s\n", err.Error())
 		os.Exit(1)
 	}
 }
