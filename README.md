@@ -1,6 +1,6 @@
 # GoMux
 
-GoMux is a CLI tool that helps with tmux setup for your projects
+GoMux is a CLI tool that helps with setting up tmux for your project
 
 ## Installation
 

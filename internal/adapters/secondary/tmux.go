@@ -5,10 +5,56 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strings"
 
 	"github.com/nxdir-s/gomux/internal/core/entity"
 	"github.com/nxdir-s/gomux/internal/core/entity/tmux"
 )
+
+type ErrNewSession struct {
+	session string
+	err     error
+}
+
+func (e *ErrNewSession) Error() string {
+	return "error creating new session named '" + e.session + "': " + e.err.Error()
+}
+
+type ErrAttachSession struct {
+	session string
+	err     error
+}
+
+func (e *ErrAttachSession) Error() string {
+	return "error attaching to session '" + e.session + "': " + e.err.Error()
+}
+
+type ErrNewWindow struct {
+	window string
+	err    error
+}
+
+func (e *ErrNewWindow) Error() string {
+	return "error creating new window named '" + e.window + "': " + e.err.Error()
+}
+
+type ErrSelectWindow struct {
+	window string
+	err    error
+}
+
+func (e *ErrSelectWindow) Error() string {
+	return "error selecting " + e.window + " window: " + e.err.Error()
+}
+
+type ErrSendKeys struct {
+	cmd string
+	err error
+}
+
+func (e *ErrSendKeys) Error() string {
+	return "error executing " + string(tmux.SendKeysCmd) + " with cmd '" + e.cmd + "': " + e.err.Error()
+}
 
 type TmuxAdapter struct {
 	cfg *entity.Config
@@ -46,7 +92,7 @@ func (a *TmuxAdapter) NewSession(ctx context.Context, name string) error {
 	if err != nil {
 		fmt.Fprintf(os.Stdout, "%s failed, output: %s\n", string(tmux.NewSessionCmd), string(output))
 
-		return err
+		return &ErrNewSession{name, err}
 	}
 
 	fmt.Fprintf(os.Stdout, "%s output: %s\n", string(tmux.NewSessionCmd), string(output))
@@ -62,7 +108,7 @@ func (a *TmuxAdapter) AttachSession(ctx context.Context) error {
 	if err != nil {
 		fmt.Fprintf(os.Stdout, "%s failed, output: %s\n", string(tmux.AttachCmd), string(output))
 
-		return err
+		return &ErrAttachSession{a.cfg.Session, err}
 	}
 
 	fmt.Fprintf(os.Stdout, "%s output: %s\n", string(tmux.AttachCmd), string(output))
@@ -80,7 +126,7 @@ func (a *TmuxAdapter) SendKeys(ctx context.Context, name string, args ...string)
 	if err != nil {
 		fmt.Fprintf(os.Stdout, "%s failed, output: %s\n", string(tmux.SendKeysCmd), string(output))
 
-		return err
+		return &ErrSendKeys{strings.Join(cmdArgs, " "), err}
 	}
 
 	fmt.Fprintf(os.Stdout, "%s output: %s\n", string(tmux.SendKeysCmd), string(output))
@@ -95,7 +141,7 @@ func (a *TmuxAdapter) NewWindow(ctx context.Context, cfgIndex int) error {
 	if err != nil {
 		fmt.Fprintf(os.Stdout, "%s failed, output: %s\n", string(tmux.NewWindowCmd), string(output))
 
-		return err
+		return &ErrNewWindow{a.cfg.Windows[cfgIndex].Name, err}
 	}
 
 	fmt.Fprintf(os.Stdout, "%s output: %s\n", string(tmux.NewWindowCmd), string(output))
@@ -110,7 +156,7 @@ func (a *TmuxAdapter) SelectWindow(ctx context.Context, cfgIndex int) error {
 	if err != nil {
 		fmt.Fprintf(os.Stdout, "%s failed, output: %s\n", string(tmux.SelectWindowCmd), string(output))
 
-		return err
+		return &ErrSelectWindow{a.cfg.Windows[cfgIndex].Name, err}
 	}
 
 	fmt.Fprintf(os.Stdout, "%s output: %s\n", string(tmux.SelectWindowCmd), string(output))
