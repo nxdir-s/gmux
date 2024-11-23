@@ -29,6 +29,7 @@ type Tmux struct {
 	service ports.TmuxService
 }
 
+// NewTmux creates a Tmux orchestrator
 func NewTmux(config *entity.Config, service ports.TmuxService) (*Tmux, error) {
 	return &Tmux{
 		cfg:     config,
@@ -36,6 +37,7 @@ func NewTmux(config *entity.Config, service ports.TmuxService) (*Tmux, error) {
 	}, nil
 }
 
+// Start orchestrates tmux setup
 func (d *Tmux) Start(ctx context.Context) error {
 	if exists := d.service.SessionExists(ctx); exists == tmux.SessionNotExists {
 		if err := d.SetupSession(ctx); err != nil {
@@ -50,6 +52,7 @@ func (d *Tmux) Start(ctx context.Context) error {
 	return nil
 }
 
+// SetupSession creates a new session and windows using the config
 func (d *Tmux) SetupSession(ctx context.Context) error {
 	if err := d.service.NewSession(ctx, d.cfg.Windows[d.cfg.StartIndex].Name); err != nil {
 		return &ErrSessionSetup{err}
@@ -68,6 +71,7 @@ func (d *Tmux) SetupSession(ctx context.Context) error {
 	return nil
 }
 
+// SetupWindow creates a new window and executes the configured command
 func (d *Tmux) SetupWindow(ctx context.Context, cfgIndex int) error {
 	if cfgIndex != d.cfg.StartIndex {
 		if err := d.service.NewWindow(ctx, cfgIndex); err != nil {
