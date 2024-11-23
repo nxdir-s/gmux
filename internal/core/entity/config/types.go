@@ -1,8 +1,6 @@
 package config
 
-const (
-	FileName string = ".gomux.toml"
-)
+const FileName string = ".gomux.toml"
 
 type Window struct {
 	Name string
