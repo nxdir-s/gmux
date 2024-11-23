@@ -1,8 +1,6 @@
 package tmux
 
-const (
-	Alias string = "tmux"
-)
+const Alias string = "tmux"
 
 const (
 	SessionExists int = iota
