@@ -39,10 +39,12 @@ type Window struct {
 
 type TomlAdapter struct{}
 
+// NewTomlAdapter creates a toml adapter
 func NewTomlAdapter() (*TomlAdapter, error) {
 	return &TomlAdapter{}, nil
 }
 
+// LoadConfig attempts to read a toml file in the current directory and returns a config
 func (a *TomlAdapter) LoadConfig() (*entity.Config, error) {
 	data, err := os.ReadFile(config.FileName)
 	if err != nil {

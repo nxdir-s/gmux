@@ -60,12 +60,14 @@ type TmuxAdapter struct {
 	cfg *entity.Config
 }
 
+// NewTmuxAdapter creates a tmux adapter
 func NewTmuxAdapter(config *entity.Config) (*TmuxAdapter, error) {
 	return &TmuxAdapter{
 		cfg: config,
 	}, nil
 }
 
+// HasSession checks for an already existing tmux session
 func (a *TmuxAdapter) HasSession(ctx context.Context) int {
 	cmd := exec.CommandContext(ctx, tmux.Alias, string(tmux.HasSessionCmd), "-t", a.cfg.Session)
 
@@ -83,6 +85,7 @@ func (a *TmuxAdapter) HasSession(ctx context.Context) int {
 	return tmux.SessionExists
 }
 
+// NewSession creates a new tmux session
 func (a *TmuxAdapter) NewSession(ctx context.Context, name string) error {
 	cmd := exec.CommandContext(ctx, tmux.Alias, string(tmux.NewSessionCmd), "-d", "-s", a.cfg.Session, "-n", name)
 
@@ -100,6 +103,7 @@ func (a *TmuxAdapter) NewSession(ctx context.Context, name string) error {
 	return nil
 }
 
+// AttachSession attempts attaching to a tmux session
 func (a *TmuxAdapter) AttachSession(ctx context.Context) error {
 	cmd := exec.CommandContext(ctx, tmux.Alias, string(tmux.AttachCmd), "-t", a.cfg.Session)
 	cmd.Stdin = os.Stdin
@@ -116,6 +120,7 @@ func (a *TmuxAdapter) AttachSession(ctx context.Context) error {
 	return nil
 }
 
+// SendKeys executes the config window's command
 func (a *TmuxAdapter) SendKeys(ctx context.Context, cfgIndex int) error {
 	cmdArgs := []string{string(tmux.SendKeysCmd), "-t", a.cfg.Session + ":" + a.cfg.Windows[cfgIndex].Name}
 	cmdArgs = append(cmdArgs, a.cfg.Windows[cfgIndex].Cmd...)
@@ -134,6 +139,7 @@ func (a *TmuxAdapter) SendKeys(ctx context.Context, cfgIndex int) error {
 	return nil
 }
 
+// NewWindow creates a new tmux window
 func (a *TmuxAdapter) NewWindow(ctx context.Context, cfgIndex int) error {
 	cmd := exec.CommandContext(ctx, tmux.Alias, string(tmux.NewWindowCmd), "-t", a.cfg.Session, "-n", a.cfg.Windows[cfgIndex].Name)
 
@@ -149,6 +155,7 @@ func (a *TmuxAdapter) NewWindow(ctx context.Context, cfgIndex int) error {
 	return nil
 }
 
+// SelectWindow selects a tmux window based on the cfgIndex
 func (a *TmuxAdapter) SelectWindow(ctx context.Context, cfgIndex int) error {
 	cmd := exec.CommandContext(ctx, tmux.Alias, string(tmux.SelectWindowCmd), "-t", a.cfg.Session+":"+a.cfg.Windows[cfgIndex].Name)
 
