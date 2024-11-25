@@ -2,6 +2,7 @@ package ports
 
 import (
 	"context"
+	"os/exec"
 
 	"github.com/nxdir-s/gomux/internal/core/entity"
 )
@@ -17,4 +18,8 @@ type TmuxPort interface {
 	SendKeys(ctx context.Context, cfgIndex int) error
 	NewWindow(ctx context.Context, cfgIndex int) error
 	SelectWindow(ctx context.Context, cfgIndex int) error
+}
+
+type CommandPort interface {
+	Exec(ctx context.Context, cmd *exec.Cmd) ([]byte, error)
 }

@@ -25,6 +25,7 @@ func main() {
 
 	// secondary adapters
 	var tmuxAdapter ports.TmuxPort
+	var cmdAdapter ports.CommandPort
 	var config ports.ConfigPort
 
 	// primary adapter
@@ -42,7 +43,13 @@ func main() {
 		os.Exit(1)
 	}
 
-	tmuxAdapter, err = secondary.NewTmuxAdapter(cfg)
+	cmdAdapter, err = secondary.NewCommandAdapter(ctx)
+	if err != nil {
+		fmt.Fprintf(os.Stdout, "error creating command adapter: %s\n", err.Error())
+		os.Exit(1)
+	}
+
+	tmuxAdapter, err = secondary.NewTmuxAdapter(cfg, cmdAdapter)
 	if err != nil {
 		fmt.Fprintf(os.Stdout, "error creating tmux adapter: %s\n", err.Error())
 		os.Exit(1)
