@@ -9,6 +9,7 @@ import (
 
 	"github.com/nxdir-s/gomux/internal/core/entity"
 	"github.com/nxdir-s/gomux/internal/core/entity/tmux"
+	"github.com/nxdir-s/gomux/internal/ports"
 )
 
 type ErrNewSession struct {
@@ -58,12 +59,14 @@ func (e *ErrSendKeys) Error() string {
 
 type TmuxAdapter struct {
 	cfg *entity.Config
+	cmd ports.CommandPort
 }
 
 // NewTmuxAdapter creates a tmux adapter
-func NewTmuxAdapter(config *entity.Config) (*TmuxAdapter, error) {
+func NewTmuxAdapter(config *entity.Config, cmd ports.CommandPort) (*TmuxAdapter, error) {
 	return &TmuxAdapter{
 		cfg: config,
+		cmd: cmd,
 	}, nil
 }
 
@@ -73,7 +76,7 @@ func (a *TmuxAdapter) HasSession(ctx context.Context) int {
 
 	fmt.Fprintf(os.Stdout, "checking for existing session '%s'\n", a.cfg.Session)
 
-	output, err := cmd.CombinedOutput()
+	output, err := a.cmd.Exec(ctx, cmd)
 	if err != nil {
 		fmt.Fprintf(os.Stdout, "%s output: %s\n", string(tmux.HasSessionCmd), string(output))
 
@@ -91,7 +94,7 @@ func (a *TmuxAdapter) NewSession(ctx context.Context, name string) error {
 
 	fmt.Fprintf(os.Stdout, "creating new session named '%s'\n", a.cfg.Session)
 
-	output, err := cmd.CombinedOutput()
+	output, err := a.cmd.Exec(ctx, cmd)
 	if err != nil {
 		fmt.Fprintf(os.Stdout, "%s failed, output: %s\n", string(tmux.NewSessionCmd), string(output))
 
@@ -108,7 +111,7 @@ func (a *TmuxAdapter) AttachSession(ctx context.Context) error {
 	cmd := exec.CommandContext(ctx, tmux.Alias, string(tmux.AttachCmd), "-t", a.cfg.Session)
 	cmd.Stdin = os.Stdin
 
-	output, err := cmd.CombinedOutput()
+	output, err := a.cmd.Exec(ctx, cmd)
 	if err != nil {
 		fmt.Fprintf(os.Stdout, "%s failed, output: %s\n", string(tmux.AttachCmd), string(output))
 
@@ -127,7 +130,7 @@ func (a *TmuxAdapter) SendKeys(ctx context.Context, cfgIndex int) error {
 
 	cmd := exec.CommandContext(ctx, tmux.Alias, cmdArgs...)
 
-	output, err := cmd.CombinedOutput()
+	output, err := a.cmd.Exec(ctx, cmd)
 	if err != nil {
 		fmt.Fprintf(os.Stdout, "%s failed, output: %s\n", string(tmux.SendKeysCmd), string(output))
 
@@ -143,7 +146,7 @@ func (a *TmuxAdapter) SendKeys(ctx context.Context, cfgIndex int) error {
 func (a *TmuxAdapter) NewWindow(ctx context.Context, cfgIndex int) error {
 	cmd := exec.CommandContext(ctx, tmux.Alias, string(tmux.NewWindowCmd), "-t", a.cfg.Session, "-n", a.cfg.Windows[cfgIndex].Name)
 
-	output, err := cmd.CombinedOutput()
+	output, err := a.cmd.Exec(ctx, cmd)
 	if err != nil {
 		fmt.Fprintf(os.Stdout, "%s failed, output: %s\n", string(tmux.NewWindowCmd), string(output))
 
@@ -159,7 +162,7 @@ func (a *TmuxAdapter) NewWindow(ctx context.Context, cfgIndex int) error {
 func (a *TmuxAdapter) SelectWindow(ctx context.Context, cfgIndex int) error {
 	cmd := exec.CommandContext(ctx, tmux.Alias, string(tmux.SelectWindowCmd), "-t", a.cfg.Session+":"+a.cfg.Windows[cfgIndex].Name)
 
-	output, err := cmd.CombinedOutput()
+	output, err := a.cmd.Exec(ctx, cmd)
 	if err != nil {
 		fmt.Fprintf(os.Stdout, "%s failed, output: %s\n", string(tmux.SelectWindowCmd), string(output))
 
