@@ -87,7 +87,7 @@ func (a *TmuxAdapter) HasSession(ctx context.Context) int {
 	buf := &strings.Builder{}
 	io.Copy(buf, output)
 
-	fmt.Fprintf(os.Stdout, "%s output: %s\n", string(tmux.HasSessionCmd), string(buf.String()))
+	fmt.Fprintf(os.Stdout, "%s output: %s\n", string(tmux.HasSessionCmd), buf.String())
 
 	return tmux.SessionExists
 }
@@ -128,7 +128,7 @@ func (a *TmuxAdapter) AttachSession(ctx context.Context) error {
 	buf := &strings.Builder{}
 	io.Copy(buf, output)
 
-	fmt.Fprintf(os.Stdout, "%s output: %s\n", string(tmux.AttachCmd), string(buf.String()))
+	fmt.Fprintf(os.Stdout, "%s output: %s\n", string(tmux.AttachCmd), buf.String())
 
 	return nil
 }
@@ -150,7 +150,7 @@ func (a *TmuxAdapter) SendKeys(ctx context.Context, cfgIndex int) error {
 	buf := &strings.Builder{}
 	io.Copy(buf, output)
 
-	fmt.Fprintf(os.Stdout, "%s output: %s\n", string(tmux.SendKeysCmd), string(buf.String()))
+	fmt.Fprintf(os.Stdout, "%s output: %s\n", string(tmux.SendKeysCmd), buf.String())
 
 	return nil
 }
@@ -169,7 +169,7 @@ func (a *TmuxAdapter) NewWindow(ctx context.Context, cfgIndex int) error {
 	buf := &strings.Builder{}
 	io.Copy(buf, output)
 
-	fmt.Fprintf(os.Stdout, "%s output: %s\n", string(tmux.NewWindowCmd), string(buf.String()))
+	fmt.Fprintf(os.Stdout, "%s output: %s\n", string(tmux.NewWindowCmd), buf.String())
 
 	return nil
 }
@@ -188,7 +188,7 @@ func (a *TmuxAdapter) SelectWindow(ctx context.Context, cfgIndex int) error {
 	buf := &strings.Builder{}
 	io.Copy(buf, output)
 
-	fmt.Fprintf(os.Stdout, "%s output: %s\n", string(tmux.SelectWindowCmd), string(buf.String()))
+	fmt.Fprintf(os.Stdout, "%s output: %s\n", string(tmux.SelectWindowCmd), buf.String())
 
 	return nil
 }
