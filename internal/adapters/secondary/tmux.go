@@ -3,6 +3,7 @@ package secondary
 import (
 	"context"
 	"fmt"
+	"io"
 	"os"
 	"os/exec"
 	"strings"
@@ -78,12 +79,15 @@ func (a *TmuxAdapter) HasSession(ctx context.Context) int {
 
 	output, err := a.cmd.Exec(ctx, cmd)
 	if err != nil {
-		fmt.Fprintf(os.Stdout, "%s output: %s\n", string(tmux.HasSessionCmd), string(output))
+		fmt.Fprintf(os.Stdout, "%s failed: %s\n", string(tmux.HasSessionCmd), err.Error())
 
 		return tmux.SessionNotExists
 	}
 
-	fmt.Fprintf(os.Stdout, "%s output: %s\n", string(tmux.HasSessionCmd), string(output))
+	buf := &strings.Builder{}
+	io.Copy(buf, output)
+
+	fmt.Fprintf(os.Stdout, "%s output: %s\n", string(tmux.HasSessionCmd), string(buf.String()))
 
 	return tmux.SessionExists
 }
@@ -96,12 +100,15 @@ func (a *TmuxAdapter) NewSession(ctx context.Context, name string) error {
 
 	output, err := a.cmd.Exec(ctx, cmd)
 	if err != nil {
-		fmt.Fprintf(os.Stdout, "%s failed, output: %s\n", string(tmux.NewSessionCmd), string(output))
+		fmt.Fprintf(os.Stdout, "%s failed: %s\n", string(tmux.NewSessionCmd), err.Error())
 
 		return &ErrNewSession{name, err}
 	}
 
-	fmt.Fprintf(os.Stdout, "%s output: %s\n", string(tmux.NewSessionCmd), string(output))
+	buf := &strings.Builder{}
+	io.Copy(buf, output)
+
+	fmt.Fprintf(os.Stdout, "%s output: %s\n", string(tmux.NewSessionCmd), buf.String())
 
 	return nil
 }
@@ -113,12 +120,15 @@ func (a *TmuxAdapter) AttachSession(ctx context.Context) error {
 
 	output, err := a.cmd.Exec(ctx, cmd)
 	if err != nil {
-		fmt.Fprintf(os.Stdout, "%s failed, output: %s\n", string(tmux.AttachCmd), string(output))
+		fmt.Fprintf(os.Stdout, "%s failed: %s\n", string(tmux.AttachCmd), err.Error())
 
 		return &ErrAttachSession{a.cfg.Session, err}
 	}
 
-	fmt.Fprintf(os.Stdout, "%s output: %s\n", string(tmux.AttachCmd), string(output))
+	buf := &strings.Builder{}
+	io.Copy(buf, output)
+
+	fmt.Fprintf(os.Stdout, "%s output: %s\n", string(tmux.AttachCmd), string(buf.String()))
 
 	return nil
 }
@@ -132,12 +142,15 @@ func (a *TmuxAdapter) SendKeys(ctx context.Context, cfgIndex int) error {
 
 	output, err := a.cmd.Exec(ctx, cmd)
 	if err != nil {
-		fmt.Fprintf(os.Stdout, "%s failed, output: %s\n", string(tmux.SendKeysCmd), string(output))
+		fmt.Fprintf(os.Stdout, "%s failed: %s\n", string(tmux.SendKeysCmd), err.Error())
 
 		return &ErrSendKeys{strings.Join(cmdArgs, " "), err}
 	}
 
-	fmt.Fprintf(os.Stdout, "%s output: %s\n", string(tmux.SendKeysCmd), string(output))
+	buf := &strings.Builder{}
+	io.Copy(buf, output)
+
+	fmt.Fprintf(os.Stdout, "%s output: %s\n", string(tmux.SendKeysCmd), string(buf.String()))
 
 	return nil
 }
@@ -148,12 +161,15 @@ func (a *TmuxAdapter) NewWindow(ctx context.Context, cfgIndex int) error {
 
 	output, err := a.cmd.Exec(ctx, cmd)
 	if err != nil {
-		fmt.Fprintf(os.Stdout, "%s failed, output: %s\n", string(tmux.NewWindowCmd), string(output))
+		fmt.Fprintf(os.Stdout, "%s failed: %s\n", string(tmux.NewWindowCmd), err.Error())
 
 		return &ErrNewWindow{a.cfg.Windows[cfgIndex].Name, err}
 	}
 
-	fmt.Fprintf(os.Stdout, "%s output: %s\n", string(tmux.NewWindowCmd), string(output))
+	buf := &strings.Builder{}
+	io.Copy(buf, output)
+
+	fmt.Fprintf(os.Stdout, "%s output: %s\n", string(tmux.NewWindowCmd), string(buf.String()))
 
 	return nil
 }
@@ -164,12 +180,15 @@ func (a *TmuxAdapter) SelectWindow(ctx context.Context, cfgIndex int) error {
 
 	output, err := a.cmd.Exec(ctx, cmd)
 	if err != nil {
-		fmt.Fprintf(os.Stdout, "%s failed, output: %s\n", string(tmux.SelectWindowCmd), string(output))
+		fmt.Fprintf(os.Stdout, "%s failed: %s\n", string(tmux.SelectWindowCmd), err.Error())
 
 		return &ErrSelectWindow{a.cfg.Windows[cfgIndex].Name, err}
 	}
 
-	fmt.Fprintf(os.Stdout, "%s output: %s\n", string(tmux.SelectWindowCmd), string(output))
+	buf := &strings.Builder{}
+	io.Copy(buf, output)
+
+	fmt.Fprintf(os.Stdout, "%s output: %s\n", string(tmux.SelectWindowCmd), string(buf.String()))
 
 	return nil
 }

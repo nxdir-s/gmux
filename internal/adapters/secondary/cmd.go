@@ -1,7 +1,9 @@
 package secondary
 
 import (
+	"bytes"
 	"context"
+	"io"
 	"os/exec"
 )
 
@@ -11,11 +13,11 @@ func NewCommandAdapter(ctx context.Context) (*CommandAdapter, error) {
 	return &CommandAdapter{}, nil
 }
 
-func (a *CommandAdapter) Exec(ctx context.Context, cmd *exec.Cmd) ([]byte, error) {
+func (a *CommandAdapter) Exec(ctx context.Context, cmd *exec.Cmd) (io.Reader, error) {
 	output, err := cmd.CombinedOutput()
 	if err != nil {
 		return nil, err
 	}
 
-	return output, nil
+	return bytes.NewReader(output), nil
 }

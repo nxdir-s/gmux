@@ -1,8 +1,10 @@
 package tests
 
 import (
+	"bytes"
 	"context"
 	"fmt"
+	"io"
 	"os"
 	"os/exec"
 	"reflect"
@@ -36,7 +38,7 @@ func NewCommandMock(config *entity.Config, cmd *exec.Cmd, shouldErr bool) (*Comm
 	}, nil
 }
 
-func (a *CommandMock) Exec(ctx context.Context, cmd *exec.Cmd) ([]byte, error) {
+func (a *CommandMock) Exec(ctx context.Context, cmd *exec.Cmd) (io.Reader, error) {
 	if !reflect.DeepEqual(a.cmd.Args, cmd.Args) {
 		fmt.Fprintf(os.Stdout, "CommandMock: arguments are different: %+v %+v", a.cmd.Args, cmd.Args)
 		return nil, &ErrCmdArgs{}
@@ -44,10 +46,10 @@ func (a *CommandMock) Exec(ctx context.Context, cmd *exec.Cmd) ([]byte, error) {
 
 	switch a.shouldErr {
 	case true:
-		return nil, &ErrMockExec{}
+		return bytes.NewReader([]byte("")), &ErrMockExec{}
 	case false:
-		return make([]byte, 0), nil
+		return bytes.NewReader([]byte("")), nil
 	default:
-		return make([]byte, 0), nil
+		return bytes.NewReader([]byte("")), nil
 	}
 }
