@@ -5,7 +5,7 @@ import (
 )
 
 type Tmux interface {
-	SessionExists(ctx context.Context, session string) int
+	HasSession(ctx context.Context, session string) int
 	NewSession(ctx context.Context, name string) error
 	AttachSession(ctx context.Context, session string) error
 	SendKeys(ctx context.Context, cmd []string, session string, window string) error

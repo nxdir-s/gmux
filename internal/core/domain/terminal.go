@@ -41,27 +41,27 @@ func (e *ErrWindowSetup) Error() string {
 }
 
 type Terminal struct {
-	tmux ports.Tmux
-	cfg  valobj.Config
+	service ports.TerminalService
+	cfg     valobj.Config
 }
 
 // NewTerminal creates a Terminal orchestrator
-func NewTerminal(config *valobj.Config, adapter ports.Tmux) *Terminal {
+func NewTerminal(config *valobj.Config, service ports.TerminalService) *Terminal {
 	return &Terminal{
-		tmux: adapter,
-		cfg:  *config,
+		service: service,
+		cfg:     *config,
 	}
 }
 
 // StartTmux orchestrates tmux setup
 func (d *Terminal) StartTmux(ctx context.Context) error {
-	if exists := d.tmux.SessionExists(ctx); exists == TmuxSessionExists {
+	if exists := d.service.TmuxSessionExists(ctx, d.cfg.Session); exists == TmuxSessionExists {
 		if err := d.SetupSession(ctx); err != nil {
 			return err
 		}
 	}
 
-	if err := d.tmux.AttachSession(ctx); err != nil {
+	if err := d.service.TmuxAttachSession(ctx, d.cfg.Session); err != nil {
 		return err
 	}
 
@@ -70,7 +70,7 @@ func (d *Terminal) StartTmux(ctx context.Context) error {
 
 // SetupSession creates a new tmux session and windows using the config
 func (d *Terminal) SetupSession(ctx context.Context) error {
-	if err := d.tmux.NewSession(ctx, d.cfg.Windows[d.cfg.StartIndex].Name); err != nil {
+	if err := d.service.NewTmuxSession(ctx, d.cfg.Windows[d.cfg.StartIndex].Name); err != nil {
 		return &ErrSessionSetup{err}
 	}
 
@@ -80,7 +80,7 @@ func (d *Terminal) SetupSession(ctx context.Context) error {
 		}
 	}
 
-	if err := d.tmux.SelectWindow(ctx, d.cfg.StartIndex); err != nil {
+	if err := d.service.TmuxSelectWindow(ctx, d.cfg.Session, d.cfg.Windows[d.cfg.StartIndex].Name); err != nil {
 		return &ErrSessionSetup{err}
 	}
 
@@ -90,14 +90,14 @@ func (d *Terminal) SetupSession(ctx context.Context) error {
 // SetupWindow creates a new tmux window and executes the configured command
 func (d *Terminal) SetupWindow(ctx context.Context, cfgIndex int) error {
 	if cfgIndex != d.cfg.StartIndex {
-		if err := d.tmux.NewWindow(ctx, cfgIndex); err != nil {
+		if err := d.service.NewTmuxWindow(ctx, d.cfg.Session, d.cfg.Windows[cfgIndex].Name); err != nil {
 			return &ErrWindowSetup{err}
 		}
 	}
 
 	d.cfg.Windows[cfgIndex].Cmd = append(d.cfg.Windows[cfgIndex].Cmd, TmuxEnterCmd)
 
-	if err := d.tmux.SendKeys(ctx, cfgIndex); err != nil {
+	if err := d.service.TmuxSendKeys(ctx, d.cfg.Windows[cfgIndex].Cmd, d.cfg.Session, d.cfg.Windows[cfgIndex].Name); err != nil {
 		return &ErrWindowSetup{err}
 	}
 
