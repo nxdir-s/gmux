@@ -1,27 +1,27 @@
-# GoMux
+# gmux
 
-GoMux is a command-line tool that helps setting up tmux for a project
+`gmux` is a command-line tool that helps setting up tmux for a project
 
 ## Installation
 
 GoMux can be installed with the following command
 
-```shell
-$ go install github.com/nxdir-s/gomux/cmd/gomux@latest
+```bash
+$ go install github.com/nxdir-s/gmux/cmd/gmux@latest
 ```
 
 ## Usage
 
-GoMux is intended to be used to setup tmux windows for a project. While in a project directory
+`gmux` is intended to be used to setup tmux windows for a project. While in a project directory
 run the following to automatically setup tmux
 
-```shell
-$ gomux
+```bash
+$ gmux
 ```
 
 ### Configuration
 
-GoMux can be configured using a toml file named `.gomux.toml`. Tmux windows can be configured by adding `windows` sub-tables. A window
+`gmux` can be configured using a toml file named `.gmux.toml`. Tmux windows can be configured by adding `windows` sub-tables. A window
 requires a `name` and a `cmd` that will be executed
 
 > #### [Toml docs](https://toml.io/en/v1.0.0)
@@ -29,7 +29,7 @@ requires a `name` and a `cmd` that will be executed
 #### Example Config
 
 ```toml
-title = 'Example GoMux Config'
+title = 'example gmux config'
 
 session = 'SessionName'
 start_index = 0
