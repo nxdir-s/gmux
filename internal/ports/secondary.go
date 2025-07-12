@@ -2,25 +2,13 @@ package ports
 
 import (
 	"context"
-	"io"
-	"os/exec"
-
-	"github.com/nxdir-s/gomux/internal/core/entity"
 )
 
-type ConfigPort interface {
-	LoadConfig() (*entity.Config, error)
-}
-
-type TmuxPort interface {
-	HasSession(ctx context.Context) int
+type Tmux interface {
+	SessionExists(ctx context.Context, session string) int
 	NewSession(ctx context.Context, name string) error
-	AttachSession(ctx context.Context) error
-	SendKeys(ctx context.Context, cfgIndex int) error
-	NewWindow(ctx context.Context, cfgIndex int) error
-	SelectWindow(ctx context.Context, cfgIndex int) error
-}
-
-type CommandPort interface {
-	Exec(ctx context.Context, cmd *exec.Cmd) (io.Reader, error)
+	AttachSession(ctx context.Context, session string) error
+	SendKeys(ctx context.Context, cmd []string, session string, window string) error
+	NewWindow(ctx context.Context, session string, name string) error
+	SelectWindow(ctx context.Context, session string, window string) error
 }
