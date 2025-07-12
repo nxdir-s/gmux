@@ -26,7 +26,7 @@ func main() {
 	var tmux ports.Tmux
 
 	// primary adapter
-	var cli ports.CLI
+	var adapter ports.CLI
 
 	toml := adapters.NewTomlAdapter[valobj.Config]()
 
@@ -37,9 +37,9 @@ func main() {
 
 	tmux = adapters.NewTmuxAdapter(adapters.NewCmdAdapter())
 	terminal = domain.NewTerminal(&toml.Cfg, tmux)
-	cli = primary.NewCLIAdapter(terminal)
+	adapter = primary.NewCLIAdapter(terminal)
 
-	if err := cli.StartTmux(ctx); err != nil {
+	if err := adapter.StartTmux(ctx); err != nil {
 		fmt.Fprintf(os.Stdout, "%s\n", err.Error())
 		os.Exit(1)
 	}
