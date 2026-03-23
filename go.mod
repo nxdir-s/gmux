@@ -1,8 +1,11 @@
 module github.com/nxdir-s/gmux
 
-go 1.24.4
+go 1.26.1
 
-require github.com/pelletier/go-toml/v2 v2.2.4
+require (
+	github.com/nxdir-s/adapters v0.0.6
+	github.com/pelletier/go-toml/v2 v2.2.4 // indirect
+)
 
 require (
 	cloud.google.com/go/auth v0.16.2 // indirect
@@ -32,7 +35,6 @@ require (
 	github.com/jackc/pgx/v5 v5.7.5 // indirect
 	github.com/jackc/puddle/v2 v2.2.2 // indirect
 	github.com/klauspost/compress v1.18.0 // indirect
-	github.com/nxdir-s/adapters v0.0.6 // indirect
 	github.com/pierrec/lz4/v4 v4.1.22 // indirect
 	github.com/twmb/franz-go v1.19.5 // indirect
 	github.com/twmb/franz-go/pkg/kadm v1.16.0 // indirect
